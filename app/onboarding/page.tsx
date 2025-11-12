@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -21,7 +21,9 @@ import {
   preferencesSchema,
   type OnboardingInput,
 } from "@/lib/validations/onboarding"
-import { activityLevels, goals } from "@/lib/mock-data"
+import { activityLevels } from "@/lib/mock-data"
+import { WeightGoalSlider } from "@/components/onboarding/WeightGoalSlider"
+import { type WeightGoalAnalysis } from "@/lib/nutrition/weight-goal-safety"
 
 const STEPS = [
   { id: 1, title: "Informations de base", description: "Parlez-nous de vous" },
@@ -64,8 +66,27 @@ export default function OnboardingPage() {
     defaultValues: {
       activityLevel: undefined,
       goal: undefined,
+      targetWeight: undefined,
     },
   })
+
+  // Weight goal analysis state for step 3
+  const [, setWeightGoalAnalysis] = useState<WeightGoalAnalysis | null>(null)
+
+  // Memoize the callback to prevent re-renders
+  const handleTargetWeightChange = useCallback((weight: number, analysis: WeightGoalAnalysis) => {
+    step3Form.setValue("targetWeight", weight)
+    setWeightGoalAnalysis(analysis)
+
+    // Déduire automatiquement le goal basé sur l'analyse
+    let goal: "LOSE_WEIGHT" | "MAINTAIN" | "GAIN_MUSCLE" = "MAINTAIN"
+    if (analysis.weightChange < -0.5) {
+      goal = "LOSE_WEIGHT"
+    } else if (analysis.weightChange > 0.5) {
+      goal = "GAIN_MUSCLE"
+    }
+    step3Form.setValue("goal", goal)
+  }, [])
 
   // Step 4 form
   const step4Form = useForm({
@@ -88,6 +109,7 @@ export default function OnboardingPage() {
   })
 
   const handleStep3Next = step3Form.handleSubmit((data) => {
+    // Le goal est déjà défini dans handleTargetWeightChange
     setFormData((prev) => ({ ...prev, ...data }))
     setCurrentStep(4)
   })
@@ -193,7 +215,7 @@ export default function OnboardingPage() {
                 <div className="space-y-3">
                   <Label>Sexe</Label>
                   <RadioGroup
-                    onValueChange={(value) => step1Form.setValue("sex", value as any)}
+                    onValueChange={(value) => step1Form.setValue("sex", value as "MALE" | "FEMALE" | "OTHER")}
                     className="flex gap-4"
                   >
                     <div className="flex items-center space-x-2">
@@ -302,28 +324,47 @@ export default function OnboardingPage() {
                 <p className="text-sm text-muted-foreground">{STEPS[2].description}</p>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-6">
+                {/* Debug info */}
+                {!formData.weight || !formData.height || !formData.sex ? (
+                  <div className="p-4 bg-yellow-500/10 border border-yellow-500 rounded-lg">
+                    <p className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                      Debug: Données manquantes
+                    </p>
+                    <ul className="text-xs mt-2 space-y-1">
+                      <li>Poids: {formData.weight || "manquant"}</li>
+                      <li>Taille: {formData.height || "manquante"}</li>
+                      <li>Sexe: {formData.sex || "manquant"}</li>
+                    </ul>
+                  </div>
+                ) : null}
+
+                {/* Niveau d'activité */}
                 <div className="space-y-2">
-                  <Label htmlFor="activityLevel">Niveau d'activité physique</Label>
-                  <Select
-                    onValueChange={(value) => step3Form.setValue("activityLevel", value as any)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Sélectionnez votre niveau" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {activityLevels.map((level) => (
-                        <SelectItem key={level.value} value={level.value}>
-                          <div>
-                            <div className="font-medium">{level.label}</div>
-                            <div className="text-xs text-muted-foreground">
-                              {level.description}
-                            </div>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="activityLevel">Niveau d&apos;activité physique</Label>
+                  <Controller
+                    name="activityLevel"
+                    control={step3Form.control}
+                    render={({ field }) => (
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionnez votre niveau" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {activityLevels.map((level) => (
+                            <SelectItem key={level.value} value={level.value}>
+                              <div>
+                                <div className="font-medium">{level.label}</div>
+                                <div className="text-xs text-muted-foreground">
+                                  {level.description}
+                                </div>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
                   {step3Form.formState.errors.activityLevel && (
                     <p className="text-sm text-destructive">
                       {step3Form.formState.errors.activityLevel.message}
@@ -331,33 +372,25 @@ export default function OnboardingPage() {
                   )}
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="goal">Votre objectif</Label>
-                  <Select
-                    onValueChange={(value) => step3Form.setValue("goal", value as any)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Sélectionnez votre objectif" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {goals.map((goal) => (
-                        <SelectItem key={goal.value} value={goal.value}>
-                          <div>
-                            <div className="font-medium">{goal.label}</div>
-                            <div className="text-xs text-muted-foreground">
-                              {goal.description}
-                            </div>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {step3Form.formState.errors.goal && (
-                    <p className="text-sm text-destructive">
-                      {step3Form.formState.errors.goal.message}
-                    </p>
-                  )}
-                </div>
+                {/* Weight Goal Slider - Affiché seulement si on a le poids, taille et sexe */}
+                {formData.weight && formData.height && formData.sex && (
+                  <div className="space-y-2">
+                    <WeightGoalSlider
+                      currentWeight={formData.weight}
+                      height={formData.height}
+                      sex={formData.sex}
+                      onTargetWeightChange={handleTargetWeightChange}
+                    />
+                    {step3Form.formState.errors.targetWeight && (
+                      <p className="text-sm text-destructive">
+                        {step3Form.formState.errors.targetWeight.message}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Objectif déduit automatiquement */}
+                <input type="hidden" {...step3Form.register("goal")} />
               </div>
 
               <div className="flex gap-3">
@@ -391,21 +424,25 @@ export default function OnboardingPage() {
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="dietType">Type de régime (optionnel)</Label>
-                  <Select
-                    onValueChange={(value) => step4Form.setValue("dietType", value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Aucun régime spécifique" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">Aucun</SelectItem>
-                      <SelectItem value="vegetarian">Végétarien</SelectItem>
-                      <SelectItem value="vegan">Végan</SelectItem>
-                      <SelectItem value="keto">Keto</SelectItem>
-                      <SelectItem value="paleo">Paleo</SelectItem>
-                      <SelectItem value="mediterranean">Méditerranéen</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <Controller
+                    name="dietType"
+                    control={step4Form.control}
+                    render={({ field }) => (
+                      <Select onValueChange={field.onChange} value={field.value}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Aucun régime spécifique" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">Aucun</SelectItem>
+                          <SelectItem value="vegetarian">Végétarien</SelectItem>
+                          <SelectItem value="vegan">Végan</SelectItem>
+                          <SelectItem value="keto">Keto</SelectItem>
+                          <SelectItem value="paleo">Paleo</SelectItem>
+                          <SelectItem value="mediterranean">Méditerranéen</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  />
                 </div>
 
                 <div className="p-4 rounded-lg bg-muted/50 border">

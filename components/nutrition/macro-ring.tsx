@@ -15,7 +15,6 @@ export function MacroRing({
   label,
   current,
   target,
-  unit = "g",
   color = "primary",
   size = "md",
 }: MacroRingProps) {

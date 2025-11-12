@@ -30,7 +30,7 @@ const mealTypeLabels = {
   SNACK: { label: "Collation", emoji: "🍎", color: "bg-green-500/10 text-green-700 dark:text-green-400" },
 }
 
-export function MealCard({ mealType, timestamp, imageUrl, foods, totalCalories, totalProtein, totalCarbs, totalFat }: MealCardProps) {
+export function MealCard({ mealType, timestamp, foods, totalCalories, totalProtein, totalCarbs, totalFat }: MealCardProps) {
   const mealInfo = mealTypeLabels[mealType]
   const timeString = timestamp.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })
 

@@ -46,7 +46,7 @@ export default function SignInPage() {
       // Successful login - redirect will be handled by middleware
       router.push("/dashboard")
       router.refresh()
-    } catch (err) {
+    } catch {
       setError("Une erreur est survenue")
       setIsLoading(false)
     }
@@ -116,7 +116,7 @@ export default function SignInPage() {
             <div className="text-center text-sm">
               <span className="text-muted-foreground">Pas encore de compte? </span>
               <Link href="/register" className="text-primary hover:underline font-medium">
-                S'inscrire
+                S&apos;inscrire
               </Link>
             </div>
           </form>

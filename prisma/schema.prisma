@@ -77,6 +77,11 @@ model User {
   idealWeight   Float?
   bodyFatPercent Float?
 
+  // Weight goal tracking
+  targetWeight          Float? // kg - poids cible défini par l'utilisateur
+  weeklyWeightChangeGoal Float? // kg/semaine (négatif pour perte, positif pour gain)
+  estimatedTargetDate    DateTime? // date estimée pour atteindre l'objectif
+
   // Daily targets
   dailyCalories Int?
   dailyProtein  Int?

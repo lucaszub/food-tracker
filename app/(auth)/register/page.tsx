@@ -53,7 +53,7 @@ export default function RegisterPage() {
 
       // Redirect to onboarding
       router.push("/onboarding")
-    } catch (err) {
+    } catch {
       setError("Une erreur est survenue lors de l'inscription")
       setIsLoading(false)
     }
@@ -83,7 +83,7 @@ export default function RegisterPage() {
           </div>
           <CardTitle className="text-2xl">Créer un compte</CardTitle>
           <CardDescription>
-            Commencez votre suivi nutritionnel aujourd'hui
+            Commencez votre suivi nutritionnel aujourd&apos;hui
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -221,7 +221,7 @@ export default function RegisterPage() {
 
             <p className="text-xs text-center text-muted-foreground">
               En créant un compte, vous acceptez nos{" "}
-              <Link href="/terms" className="underline">conditions d'utilisation</Link>
+              <Link href="/terms" className="underline">conditions d&apos;utilisation</Link>
             </p>
           </form>
         </CardContent>

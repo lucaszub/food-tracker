@@ -181,13 +181,13 @@ export default function ProfilePage() {
 
             <Card>
               <CardHeader>
-                <CardTitle>Niveau d'activité</CardTitle>
+                <CardTitle>Niveau d&apos;activité</CardTitle>
                 <CardDescription>Influence votre dépense énergétique quotidienne</CardDescription>
               </CardHeader>
               <CardContent>
                 <Select
                   value={formData.activityLevel}
-                  onValueChange={(value) => setFormData({ ...formData, activityLevel: value as any })}
+                  onValueChange={(value) => setFormData({ ...formData, activityLevel: value as typeof formData.activityLevel })}
                   disabled={!isEditing}
                 >
                   <SelectTrigger>
@@ -278,7 +278,7 @@ export default function ProfilePage() {
                   </p>
                   <Separator className="my-3" />
                   <div className="text-xs text-muted-foreground">
-                    BMR × facteur d'activité ({mockUser.activityLevel.toLowerCase()})
+                    BMR × facteur d&apos;activité ({mockUser.activityLevel.toLowerCase()})
                   </div>
                 </CardContent>
               </Card>
@@ -354,7 +354,7 @@ export default function ProfilePage() {
               <CardContent>
                 <Select
                   value={formData.goal}
-                  onValueChange={(value) => setFormData({ ...formData, goal: value as any })}
+                  onValueChange={(value) => setFormData({ ...formData, goal: value as typeof formData.goal })}
                   disabled={!isEditing}
                 >
                   <SelectTrigger>
@@ -451,11 +451,11 @@ export default function ProfilePage() {
                         </div>
                         <div className="flex gap-2">
                           <span className="text-chart-1">•</span>
-                          <p>Incluez des graisses saines (avocat, noix, huile d'olive)</p>
+                          <p>Incluez des graisses saines (avocat, noix, huile d&apos;olive)</p>
                         </div>
                         <div className="flex gap-2">
                           <span className="text-chart-1">•</span>
-                          <p>Restez hydraté avec 2-3L d'eau par jour</p>
+                          <p>Restez hydraté avec 2-3L d&apos;eau par jour</p>
                         </div>
                       </CardContent>
                     </Card>

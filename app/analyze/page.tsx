@@ -8,8 +8,7 @@ import { ImageUploader } from "@/components/analyze/image-uploader"
 import { AnalysisResult } from "@/components/analyze/analysis-result"
 import { Loader2, ArrowLeft, Save } from "lucide-react"
 import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 // Mock analysis result - en production, ceci viendrait de l'API
 const mockAnalysisResult = {
@@ -198,11 +197,11 @@ export default function AnalyzePage() {
                   <ul className="space-y-2 text-sm text-muted-foreground">
                     <li className="flex gap-2">
                       <span className="text-primary">•</span>
-                      Photographiez le repas d'en haut pour une vue complète
+                      Photographiez le repas d&apos;en haut pour une vue complète
                     </li>
                     <li className="flex gap-2">
                       <span className="text-primary">•</span>
-                      Assurez-vous que l'image est bien éclairée
+                      Assurez-vous que l&apos;image est bien éclairée
                     </li>
                     <li className="flex gap-2">
                       <span className="text-primary">•</span>
@@ -226,7 +225,7 @@ export default function AnalyzePage() {
                   <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
                   <h3 className="font-semibold text-lg mb-2">Analyse en cours...</h3>
                   <p className="text-sm text-muted-foreground max-w-sm mx-auto">
-                    L'IA analyse votre repas pour identifier les aliments et calculer les valeurs nutritionnelles
+                    L&apos;IA analyse votre repas pour identifier les aliments et calculer les valeurs nutritionnelles
                   </p>
                 </CardContent>
               </Card>
@@ -269,7 +268,7 @@ export default function AnalyzePage() {
                   </div>
                   <h3 className="font-semibold text-lg mb-2">Aucune analyse en cours</h3>
                   <p className="text-sm text-muted-foreground max-w-sm">
-                    Ajoutez une photo de votre repas pour commencer l'analyse nutritionnelle
+                    Ajoutez une photo de votre repas pour commencer l&apos;analyse nutritionnelle
                   </p>
                 </CardContent>
               </Card>

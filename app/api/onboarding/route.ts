@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
+import { getServerSession } from "next-auth/next"
+import type { Session } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { onboardingSchema } from "@/lib/validations/onboarding"
 import { calculateAllMetrics, calculateAge } from "@/lib/nutrition/calculations"
+import { analyzeWeightGoal } from "@/lib/nutrition/weight-goal-safety"
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = (await getServerSession(authOptions)) as Session | null
 
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -39,6 +41,18 @@ export async function POST(req: Request) {
       validatedData.goal
     )
 
+    // Analyze weight goal to calculate weekly rate and estimated target date
+    const weightGoalAnalysis = analyzeWeightGoal(
+      validatedData.weight,
+      validatedData.targetWeight,
+      validatedData.height,
+      validatedData.sex
+    )
+
+    // Calculate estimated target date
+    const estimatedTargetDate = new Date()
+    estimatedTargetDate.setDate(estimatedTargetDate.getDate() + (weightGoalAnalysis.estimatedWeeks * 7))
+
     // Update user with profile data and calculated metrics
     const updatedUser = await prisma.user.update({
       where: { id: session.user.id },
@@ -50,6 +64,13 @@ export async function POST(req: Request) {
         height: validatedData.height,
         activityLevel: validatedData.activityLevel,
         goal: validatedData.goal,
+
+        // Weight goal tracking
+        targetWeight: validatedData.targetWeight,
+        weeklyWeightChangeGoal: weightGoalAnalysis.weightChange >= 0
+          ? weightGoalAnalysis.recommendedWeeklyRate
+          : -weightGoalAnalysis.recommendedWeeklyRate,
+        estimatedTargetDate: estimatedTargetDate,
 
         // Calculated metrics
         bmi: metrics.bmi,

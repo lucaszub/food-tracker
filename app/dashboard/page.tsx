@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge"
 import { MacroRing } from "@/components/nutrition/macro-ring"
 import { NutritionProgress } from "@/components/nutrition/nutrition-progress"
 import { MealCard } from "@/components/nutrition/meal-card"
-import { mockRecommendations } from "@/lib/mock-data"
 import { Target, TrendingUp, AlertCircle, Flame, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -30,7 +29,24 @@ type UserData = {
     dailyCarbs: number | null
     dailyFat: number | null
   }
-  todayMeals: any[]
+  todayMeals: Array<{
+    id: string
+    mealType: "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK"
+    timestamp: Date
+    imageUrl?: string
+    foods: Array<{
+      name: string
+      portion: string
+      calories: number
+      protein: number
+      carbs: number
+      fat: number
+    }>
+    totalCalories: number
+    totalProtein: number
+    totalCarbs: number
+    totalFat: number
+  }>
   todayTotals: {
     calories: number
     protein: number
@@ -210,7 +226,7 @@ export default function DashboardPage() {
             }
             const Icon = icons[rec.icon as keyof typeof icons]
 
-            const colorClasses = {
+            const colorClasses: Record<string, string> = {
               info: "border-info/20 bg-info/5",
               success: "border-chart-1/20 bg-chart-1/5",
               warning: "border-warning/20 bg-warning/5",
@@ -269,7 +285,7 @@ export default function DashboardPage() {
         <div>
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-2xl font-bold">Repas d'aujourd'hui</h2>
+              <h2 className="text-2xl font-bold">Repas d&apos;aujourd&apos;hui</h2>
               <p className="text-sm text-muted-foreground">
                 {todayMeals.length > 0 ? `${todayMeals.length} repas enregistrés` : "Aucun repas enregistré"}
               </p>
@@ -291,7 +307,7 @@ export default function DashboardPage() {
           ) : (
             <Card className="border-dashed">
               <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                <p className="text-muted-foreground mb-4">Aucun repas enregistré aujourd'hui</p>
+                <p className="text-muted-foreground mb-4">Aucun repas enregistré aujourd&apos;hui</p>
                 <Link href="/analyze">
                   <Button>Analyser votre premier repas</Button>
                 </Link>
