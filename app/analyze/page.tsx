@@ -94,11 +94,50 @@ export default function AnalyzePage() {
 
     setIsAnalyzing(true)
 
-    // Simuler l'appel API avec un délai
-    await new Promise((resolve) => setTimeout(resolve, 2500))
+    try {
+      // Convertir l'image en base64
+      const reader = new FileReader()
+      const base64Image = await new Promise<string>((resolve, reject) => {
+        reader.onloadend = () => resolve(reader.result as string)
+        reader.onerror = reject
+        reader.readAsDataURL(selectedFile)
+      })
 
-    setAnalysisResult(mockAnalysisResult)
-    setIsAnalyzing(false)
+      // Appeler l'API d'analyse
+      const response = await fetch("/api/analyze-meal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: base64Image }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erreur lors de l'analyse")
+      }
+
+      // Adapter le format de l'API au format attendu par le composant
+      const formattedResult = {
+        foods: data.analysis.foods.map((food: any) => ({
+          name: food.name,
+          portion: `${food.quantity}${food.unit}`,
+          calories: food.calories,
+          protein: food.protein,
+          carbs: food.carbs,
+          fat: food.fat,
+        })),
+        total: data.analysis.total,
+        confidence: data.analysis.confidence,
+        notes: data.analysis.notes,
+      }
+
+      setAnalysisResult(formattedResult)
+    } catch (error) {
+      console.error("Erreur lors de l'analyse:", error)
+      alert(error instanceof Error ? error.message : "Erreur lors de l'analyse")
+    } finally {
+      setIsAnalyzing(false)
+    }
   }
 
   const handleSave = async () => {
