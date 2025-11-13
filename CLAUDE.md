@@ -456,6 +456,38 @@ enum MealType {
 - Logger les erreurs avec contexte suffisant
 - Utiliser des status codes HTTP appropriés
 
+### Workflow de développement et commits
+
+**RÈGLE IMPORTANTE : Ne JAMAIS commit sans validation de l'utilisateur**
+
+Avant chaque commit, l'assistant doit :
+
+1. **Tester le code** :
+   - Vérifier que le code compile sans erreurs
+   - Tester l'API ou l'interface manuellement ou avec un script de test
+   - S'assurer que les fonctionnalités marchent comme prévu
+
+2. **Attendre la validation utilisateur** :
+   - **TOUJOURS** demander à l'utilisateur de tester lui-même
+   - Attendre confirmation explicite que "ça marche" ou "c'est bon"
+   - Ne jamais commit sur une simple supposition que le code fonctionne
+
+3. **Seulement après validation** :
+   - Proposer le commit avec un message descriptif
+   - Demander confirmation avant d'exécuter `git commit`
+
+**Exemple de workflow correct** :
+```
+Assistant : "✅ Code prêt. Pouvez-vous tester sur http://localhost:3000/analyze ?"
+Utilisateur : "c'est bon ça marche"
+Assistant : "Parfait ! Je vais maintenant commit ces changements. Voici le message proposé : [...]"
+```
+
+**⚠️ INTERDIT** :
+- Commit automatique après avoir écrit du code
+- Commit sans avoir testé
+- Commit sans confirmation utilisateur explicite
+
 ## Variables d'environnement
 
 ```env
