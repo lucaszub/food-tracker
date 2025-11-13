@@ -4,6 +4,20 @@
 
 Application web moderne permettant aux utilisateurs de photographier leurs repas pour obtenir une analyse nutritionnelle complète via l'IA Claude. L'application calcule automatiquement les calories, macronutriments (protéines, glucides, lipides), et fournit des recommandations personnalisées basées sur le profil utilisateur.
 
+## 🎨 Nouveau Design UX/UI (Novembre 2025)
+
+L'application dispose désormais d'un **design moderne** inspiré des meilleures pratiques d'applications de recettes:
+
+- **Palette de couleurs**: Orange/Pêche moderne (au lieu du vert initial)
+- **Navigation mobile**: Bottom bar avec bouton FAB central
+- **Composants modernes**: Pills colorées, search bar arrondie, cards style "Featured Recipe"
+- **Pages redesignées**: Dashboard et Analyze ont des variants modernes
+- **Mobile-first**: Design optimisé pour mobile avec responsive desktop
+
+📘 **Documentation complète**: Voir [NOUVEAU_DESIGN.md](NOUVEAU_DESIGN.md) pour tous les détails du design system, composants et guide d'utilisation.
+
+📝 **Guide de test**: Voir [TEST_NOUVEAU_DESIGN.md](TEST_NOUVEAU_DESIGN.md) pour tester le nouveau design.
+
 ## Objectifs principaux
 
 1. **Analyse d'images de repas**: Utiliser l'API Claude Vision pour identifier les aliments dans une photo et estimer les portions
@@ -471,16 +485,28 @@ npm run dev              # Démarrer le serveur de développement avec Turbopack
 # Base de données
 npx prisma generate      # Générer le client Prisma
 npx prisma db push       # Pousser le schéma vers la DB
-npx prisma studio        # Interface graphique DB
+npm run studio           # Interface graphique Prisma Studio (http://localhost:5555)
+                         # ⚠️ Utilise dotenv-cli pour charger .env automatiquement
 
 # Build
-npm run build            # Build de production
-npm start               # Démarrer le serveur de production
+npm run build            # Build de production (sans turbopack, à cause d'un bug)
+npm start                # Démarrer le serveur de production
 
-# Qualitép
-npm run lint            # Linter le code
-npm run type-check      # Vérifier les types TypeScript
+# Qualité
+npm run lint             # Linter le code
+npx tsc --noEmit         # Vérifier les types TypeScript
 ```
+
+### Notes importantes sur les commandes
+
+**Prisma Studio:**
+- Le script `npm run studio` utilise `dotenv-cli` pour charger automatiquement les variables d'environnement
+- Prisma CLI ne charge pas le `.env` par défaut, d'où l'utilisation de `dotenv-cli`
+- Alternative manuelle: `DATABASE_URL="file:./dev.db" npx prisma studio`
+
+**Build:**
+- Utiliser `npx next build` (sans `--turbopack`) car turbopack a un bug avec les build manifests
+- Le build avec turbopack via `npm run build` peut échouer aléatoirement
 
 ## Considérations de sécurité
 
