@@ -1,7 +1,7 @@
 declare module "next-auth" {
   interface User {
     id: string
-    onboardingCompleted: boolean
+    onboardingCompleted?: boolean | null
   }
 
   interface Session {
@@ -10,7 +10,7 @@ declare module "next-auth" {
       email: string
       name?: string | null
       image?: string | null
-      onboardingCompleted: boolean
+      onboardingCompleted?: boolean | null
     }
   }
 }
@@ -18,6 +18,6 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   interface JWT {
     id: string
-    onboardingCompleted: boolean
+    onboardingCompleted?: boolean | null
   }
 }
