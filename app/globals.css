@@ -44,64 +44,76 @@
 }
 
 :root {
-  --radius: 0.75rem;
-  /* Vert santé/nutrition theme - Light mode */
-  --background: oklch(0.99 0.005 140);
-  --foreground: oklch(0.15 0.02 140);
+  --radius: 1rem;
+  /* Orange/Pêche moderne theme - Light mode inspiré du screenshot */
+  --background: oklch(0.99 0.002 60);
+  --foreground: oklch(0.20 0.01 60);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.02 140);
+  --card-foreground: oklch(0.20 0.01 60);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.02 140);
-  --primary: oklch(0.55 0.15 150); /* Vert émeraude */
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.75 0.08 145); /* Vert menthe clair */
-  --secondary-foreground: oklch(0.15 0.02 140);
-  --muted: oklch(0.95 0.01 140);
-  --muted-foreground: oklch(0.50 0.02 140);
-  --accent: oklch(0.70 0.12 148); /* Vert lime doux */
-  --accent-foreground: oklch(0.99 0 0);
+  --popover-foreground: oklch(0.20 0.01 60);
+  --primary: oklch(0.65 0.18 35); /* Orange principal #FF6B35 */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.94 0.02 60); /* Gris très clair */
+  --secondary-foreground: oklch(0.20 0.01 60);
+  --muted: oklch(0.96 0.01 60);
+  --muted-foreground: oklch(0.55 0.02 60);
+  --accent: oklch(0.70 0.15 35); /* Orange doux accent */
+  --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.58 0.22 25);
-  --border: oklch(0.90 0.01 140);
-  --input: oklch(0.94 0.01 140);
-  --ring: oklch(0.55 0.15 150);
-  --chart-1: oklch(0.55 0.15 150); /* Vert principal */
-  --chart-2: oklch(0.70 0.12 148); /* Vert lime */
-  --chart-3: oklch(0.65 0.18 80); /* Jaune-vert */
-  --chart-4: oklch(0.50 0.12 180); /* Bleu-vert */
-  --chart-5: oklch(0.75 0.08 145); /* Vert menthe */
-  --success: oklch(0.55 0.15 150);
-  --warning: oklch(0.75 0.15 80);
-  --info: oklch(0.60 0.12 200);
+  --border: oklch(0.92 0.01 60);
+  --input: oklch(0.96 0.01 60);
+  --ring: oklch(0.65 0.18 35);
+  /* Pills colors - pastels du screenshot */
+  --pill-peach: oklch(0.90 0.08 40); /* Pêche clair */
+  --pill-pink: oklch(0.88 0.10 10); /* Rose clair */
+  --pill-yellow: oklch(0.92 0.10 90); /* Jaune clair */
+  --pill-green: oklch(0.90 0.08 140); /* Vert clair */
+  --pill-blue: oklch(0.88 0.08 230); /* Bleu clair */
+  /* Charts - nutriments */
+  --chart-1: oklch(0.65 0.18 35); /* Orange - Protéines */
+  --chart-2: oklch(0.75 0.15 90); /* Jaune - Glucides */
+  --chart-3: oklch(0.70 0.12 150); /* Vert - Lipides */
+  --chart-4: oklch(0.60 0.15 230); /* Bleu */
+  --chart-5: oklch(0.70 0.12 340); /* Rose */
+  --success: oklch(0.65 0.15 140);
+  --warning: oklch(0.75 0.18 80);
+  --info: oklch(0.60 0.12 230);
 }
 
 .dark {
-  /* Vert santé/nutrition theme - Dark mode */
-  --background: oklch(0.12 0.01 140);
-  --foreground: oklch(0.95 0.01 140);
-  --card: oklch(0.18 0.015 140);
-  --card-foreground: oklch(0.95 0.01 140);
-  --popover: oklch(0.18 0.015 140);
-  --popover-foreground: oklch(0.95 0.01 140);
-  --primary: oklch(0.65 0.18 150); /* Vert émeraude plus vif en dark */
-  --primary-foreground: oklch(0.10 0.01 140);
-  --secondary: oklch(0.25 0.03 145);
-  --secondary-foreground: oklch(0.95 0.01 140);
-  --muted: oklch(0.22 0.02 140);
-  --muted-foreground: oklch(0.65 0.02 140);
-  --accent: oklch(0.70 0.15 148);
-  --accent-foreground: oklch(0.10 0.01 140);
+  /* Orange/Pêche moderne theme - Dark mode */
+  --background: oklch(0.15 0.01 60);
+  --foreground: oklch(0.95 0.01 60);
+  --card: oklch(0.20 0.015 60);
+  --card-foreground: oklch(0.95 0.01 60);
+  --popover: oklch(0.20 0.015 60);
+  --popover-foreground: oklch(0.95 0.01 60);
+  --primary: oklch(0.70 0.18 35); /* Orange plus vif en dark */
+  --primary-foreground: oklch(0.10 0.01 60);
+  --secondary: oklch(0.25 0.02 60);
+  --secondary-foreground: oklch(0.95 0.01 60);
+  --muted: oklch(0.25 0.02 60);
+  --muted-foreground: oklch(0.65 0.02 60);
+  --accent: oklch(0.70 0.15 35);
+  --accent-foreground: oklch(0.10 0.01 60);
   --destructive: oklch(0.65 0.20 25);
-  --border: oklch(0.28 0.02 140);
-  --input: oklch(0.25 0.02 140);
-  --ring: oklch(0.65 0.18 150);
-  --chart-1: oklch(0.65 0.18 150);
-  --chart-2: oklch(0.70 0.15 148);
-  --chart-3: oklch(0.68 0.20 80);
-  --chart-4: oklch(0.55 0.15 180);
-  --chart-5: oklch(0.75 0.10 145);
-  --success: oklch(0.65 0.18 150);
+  --border: oklch(0.30 0.02 60);
+  --input: oklch(0.28 0.02 60);
+  --ring: oklch(0.70 0.18 35);
+  --pill-peach: oklch(0.35 0.08 40);
+  --pill-pink: oklch(0.35 0.10 10);
+  --pill-yellow: oklch(0.40 0.10 90);
+  --pill-green: oklch(0.35 0.08 140);
+  --pill-blue: oklch(0.35 0.08 230);
+  --chart-1: oklch(0.70 0.18 35);
+  --chart-2: oklch(0.75 0.15 90);
+  --chart-3: oklch(0.70 0.12 150);
+  --chart-4: oklch(0.65 0.15 230);
+  --chart-5: oklch(0.70 0.12 340);
+  --success: oklch(0.65 0.18 140);
   --warning: oklch(0.75 0.18 80);
-  --info: oklch(0.65 0.15 200);
+  --info: oklch(0.65 0.15 230);
 }
 
 @layer base {
@@ -116,5 +128,22 @@
 @layer utilities {
   .container {
     @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Modern pill styles */
+  .pill-peach {
+    background-color: var(--pill-peach);
+  }
+  .pill-pink {
+    background-color: var(--pill-pink);
+  }
+  .pill-yellow {
+    background-color: var(--pill-yellow);
+  }
+  .pill-green {
+    background-color: var(--pill-green);
+  }
+  .pill-blue {
+    background-color: var(--pill-blue);
   }
 }
