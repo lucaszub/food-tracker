@@ -143,9 +143,9 @@ npx prisma generate
 npm run studio
 ```
 
-### Production (PostgreSQL/Supabase)
+### Production (PostgreSQL Cloud)
 
-Voir [CLAUDE.md](./CLAUDE.md#configuration-supabase--prisma) pour la configuration Supabase.
+Voir [PRISMA_CLOUD_SETUP.md](./PRISMA_CLOUD_SETUP.md) pour configurer Prisma Postgres ou Neon.
 
 ## 🧪 Scripts utiles
 
@@ -186,6 +186,7 @@ node test-analyze-api.mjs  # Test API d'analyse
 - [x] Profil et onboarding
 - [x] Dashboard de base
 - [x] **POC Analyse d'images avec Claude Vision**
+- [ ] **Setup Prisma Cloud Database** (en cours)
 - [ ] Sauvegarde des repas en DB
 - [ ] Stockage d'images (Vercel Blob)
 - [ ] Historique des repas
