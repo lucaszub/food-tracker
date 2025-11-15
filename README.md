@@ -25,7 +25,7 @@ Application web moderne de suivi nutritionnel avec analyse d'images de repas par
 
 ```bash
 # Cloner le repo
-git clone <votre-repo>
+git clone https://github.com/lucaszub/food-tracker.git
 cd food-tracker
 
 # Installer les dépendances
@@ -42,6 +42,7 @@ cp .env.example .env
 Voir la documentation complète : [`docs/PRISMA_CLOUD_SETUP.md`](./docs/PRISMA_CLOUD_SETUP.md)
 
 **Quick start :**
+
 1. Créer un compte sur https://console.prisma.io/
 2. Créer une database "food-tracker-db"
 3. Copier la connection string
@@ -63,6 +64,7 @@ ANTHROPIC_API_KEY="sk-ant-votre-cle-ici"
 ```
 
 **Obtenir une clé Anthropic :**
+
 1. Créer un compte sur https://console.anthropic.com/
 2. Générer une clé API
 3. La coller dans `.env`
@@ -104,6 +106,7 @@ Ouvrir [http://localhost:3000](http://localhost:3000)
 5. Voir les résultats : aliments détectés + valeurs nutritionnelles
 
 **Exemple de résultat :**
+
 - Détection de 5 aliments avec portions estimées
 - Calcul automatique : calories, protéines, glucides, lipides
 - Score de confiance de l'analyse
@@ -121,6 +124,7 @@ Documentation technique et guides dans le dossier [`docs/`](./docs/) :
 ## 🛠️ Stack technique
 
 ### Frontend
+
 - **Next.js 15.5.6** (App Router, React Server Components)
 - **React 19.1.0**
 - **TypeScript** (strict mode)
@@ -129,6 +133,7 @@ Documentation technique et guides dans le dossier [`docs/`](./docs/) :
 - **Lucide React** (icônes)
 
 ### Backend
+
 - **Next.js API Routes**
 - **Anthropic Claude API** (Sonnet 4.5 Vision)
 - **Prisma ORM** + **PostgreSQL** (Prisma Postgres cloud)
@@ -136,6 +141,7 @@ Documentation technique et guides dans le dossier [`docs/`](./docs/) :
 - **bcryptjs** (hashing de mots de passe)
 
 ### Base de données
+
 - **Prisma Postgres** (PostgreSQL cloud managé)
 - Connection pooling natif
 - Zero cold starts
@@ -184,6 +190,7 @@ prisma/
 ### Schéma Prisma
 
 Tables principales :
+
 - `User` : Utilisateurs + métriques calculées + onboarding status
 - `Account`, `Session` : NextAuth.js
 - `Meal` : Repas analysés
@@ -232,17 +239,18 @@ npx tsc --noEmit         # Vérification TypeScript
 
 ## 🔑 Variables d'environnement
 
-| Variable | Description | Requis | Exemple |
-|----------|-------------|---------|---------|
-| `DATABASE_URL` | Connection string Prisma Postgres | ✅ | `prisma+postgres://...` |
-| `NEXTAUTH_URL` | URL de l'application | ✅ | `http://localhost:3000` |
-| `NEXTAUTH_SECRET` | Secret NextAuth (32+ caractères) | ✅ | Générer avec `openssl rand -base64 32` |
-| `ANTHROPIC_API_KEY` | Clé API Anthropic | ✅ | `sk-ant-...` |
-| `BLOB_READ_WRITE_TOKEN` | Token Vercel Blob | ❌ | Pour stockage d'images (futur) |
+| Variable                | Description                       | Requis | Exemple                                |
+| ----------------------- | --------------------------------- | ------ | -------------------------------------- |
+| `DATABASE_URL`          | Connection string Prisma Postgres | ✅     | `prisma+postgres://...`                |
+| `NEXTAUTH_URL`          | URL de l'application              | ✅     | `http://localhost:3000`                |
+| `NEXTAUTH_SECRET`       | Secret NextAuth (32+ caractères)  | ✅     | Générer avec `openssl rand -base64 32` |
+| `ANTHROPIC_API_KEY`     | Clé API Anthropic                 | ✅     | `sk-ant-...`                           |
+| `BLOB_READ_WRITE_TOKEN` | Token Vercel Blob                 | ❌     | Pour stockage d'images (futur)         |
 
 ## 🚧 Roadmap
 
 ### ✅ Complété
+
 - [x] Authentification utilisateur (NextAuth.js)
 - [x] Landing page publique moderne
 - [x] Onboarding multi-étapes avec objectifs de poids
@@ -253,11 +261,13 @@ npx tsc --noEmit         # Vérification TypeScript
 - [x] Protection des routes et gestion de session
 
 ### 🔄 En cours
+
 - [ ] Sauvegarde des repas en base de données
 - [ ] Stockage d'images avec Vercel Blob
 - [ ] Historique des repas avec filtres
 
 ### 📋 À venir
+
 - [ ] Graphiques de progression (charts.js ou recharts)
 - [ ] Recommandations personnalisées via Claude
 - [ ] Export de données (PDF, CSV)
@@ -267,6 +277,7 @@ npx tsc --noEmit         # Vérification TypeScript
 ## 🤝 Contribution
 
 Ce projet est en développement actif. Consultez [CLAUDE.md](./CLAUDE.md) pour :
+
 - Architecture détaillée
 - Conventions de code
 - Workflow de développement
