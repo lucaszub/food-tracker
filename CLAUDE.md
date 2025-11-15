@@ -14,9 +14,9 @@ L'application dispose désormais d'un **design moderne** inspiré des meilleures
 - **Pages redesignées**: Dashboard et Analyze ont des variants modernes
 - **Mobile-first**: Design optimisé pour mobile avec responsive desktop
 
-📘 **Documentation complète**: Voir [NOUVEAU_DESIGN.md](NOUVEAU_DESIGN.md) pour tous les détails du design system, composants et guide d'utilisation.
+📘 **Documentation complète**: Voir [docs/NOUVEAU_DESIGN.md](docs/NOUVEAU_DESIGN.md) pour tous les détails du design system, composants et guide d'utilisation.
 
-📝 **Guide de test**: Voir [TEST_NOUVEAU_DESIGN.md](TEST_NOUVEAU_DESIGN.md) pour tester le nouveau design.
+📝 **Guide de test**: Voir [docs/TEST_NOUVEAU_DESIGN.md](docs/TEST_NOUVEAU_DESIGN.md) pour tester le nouveau design.
 
 ## Objectifs principaux
 
@@ -41,10 +41,10 @@ L'application dispose désormais d'un **design moderne** inspiré des meilleures
 ### Backend (configuré)
 
 - **Next.js API Routes** pour les endpoints
-- **Anthropic Claude API** pour l'analyse d'images (claude-3-5-sonnet ou claude-3-opus)
-- **Base de données**: PostgreSQL (Prisma Postgres ou Neon) avec Prisma ORM
-- **Authentification**: NextAuth.js avec Prisma Adapter
-- **Stockage images**: Vercel Blob
+- **Anthropic Claude API** pour l'analyse d'images (claude-3-5-sonnet-20241022)
+- **Base de données**: **Prisma Postgres** (PostgreSQL cloud) avec Prisma ORM
+- **Authentification**: NextAuth.js avec CredentialsProvider + Prisma Adapter
+- **Stockage images**: Vercel Blob (à venir)
 - **Validation**: Zod pour validation côté client et serveur
 - **Formulaires**: React Hook Form
 
@@ -575,7 +575,9 @@ npx tsc --noEmit         # Vérifier les types TypeScript
 
 ## Configuration Base de Données Cloud
 
-📘 **Voir [PRISMA_CLOUD_SETUP.md](./PRISMA_CLOUD_SETUP.md) pour le guide complet de setup.**
+📘 **Voir [docs/PRISMA_CLOUD_SETUP.md](./docs/PRISMA_CLOUD_SETUP.md) pour le guide complet de setup.**
+
+**Status actuel** : ✅ Prisma Postgres configuré et opérationnel
 
 ### Quick Start avec Prisma Postgres
 
