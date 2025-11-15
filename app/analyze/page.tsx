@@ -10,58 +10,37 @@ import { Loader2, ArrowLeft, Save } from "lucide-react"
 import Link from "next/link"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-// Mock analysis result - en production, ceci viendrait de l'API
-const mockAnalysisResult = {
-  foods: [
-    {
-      name: "Saumon grillé",
-      portion: "180g",
-      calories: 320,
-      protein: 42,
-      carbs: 0,
-      fat: 16,
-    },
-    {
-      name: "Quinoa cuit",
-      portion: "150g",
-      calories: 180,
-      protein: 6,
-      carbs: 32,
-      fat: 3,
-    },
-    {
-      name: "Asperges vertes",
-      portion: "120g",
-      calories: 25,
-      protein: 3,
-      carbs: 5,
-      fat: 0,
-    },
-    {
-      name: "Huile d'olive",
-      portion: "1 cuillère (10ml)",
-      calories: 90,
-      protein: 0,
-      carbs: 0,
-      fat: 10,
-    },
-    {
-      name: "Citron (jus)",
-      portion: "15ml",
-      calories: 5,
-      protein: 0,
-      carbs: 1,
-      fat: 0,
-    },
-  ],
+// Types pour l'analyse de repas
+type FoodItem = {
+  name: string
+  portion: string
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
+}
+
+type AnalysisResultType = {
+  foods: FoodItem[]
   total: {
-    calories: 620,
-    protein: 51,
-    carbs: 38,
-    fat: 29,
-  },
-  confidence: 0.91,
-  notes: "Repas équilibré avec excellente source de protéines et acides gras oméga-3",
+    calories: number
+    protein: number
+    carbs: number
+    fat: number
+  }
+  confidence: number
+  notes: string
+}
+
+// Type pour la réponse de l'API d'analyse
+type ApiFoodItem = {
+  name: string
+  quantity: number
+  unit: string
+  calories: number
+  protein: number
+  carbs: number
+  fat: number
 }
 
 type MealType = "BREAKFAST" | "LUNCH" | "DINNER" | "SNACK"
@@ -70,7 +49,7 @@ export default function AnalyzePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string>("")
   const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [analysisResult, setAnalysisResult] = useState<typeof mockAnalysisResult | null>(null)
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResultType | null>(null)
   const [selectedMealType, setSelectedMealType] = useState<MealType>("LUNCH")
 
   const handleImageSelect = (file: File) => {
@@ -118,7 +97,7 @@ export default function AnalyzePage() {
 
       // Adapter le format de l'API au format attendu par le composant
       const formattedResult = {
-        foods: data.analysis.foods.map((food: any) => ({
+        foods: data.analysis.foods.map((food: ApiFoodItem) => ({
           name: food.name,
           portion: `${food.quantity}${food.unit}`,
           calories: food.calories,

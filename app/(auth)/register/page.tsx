@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -33,6 +34,7 @@ export default function RegisterPage() {
     setError(null)
 
     try {
+      // 1. Créer le compte
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -51,8 +53,22 @@ export default function RegisterPage() {
         return
       }
 
-      // Redirect to onboarding
-      router.push("/onboarding")
+      // 2. Authentifier automatiquement l'utilisateur après création du compte
+      const signInResult = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      })
+
+      if (signInResult?.error) {
+        setError("Compte créé mais erreur de connexion. Veuillez vous connecter.")
+        setIsLoading(false)
+        return
+      }
+
+      // 3. Rediriger vers dashboard (le middleware redirigera vers /onboarding si nécessaire)
+      router.push("/dashboard")
+      router.refresh()
     } catch {
       setError("Une erreur est survenue lors de l'inscription")
       setIsLoading(false)

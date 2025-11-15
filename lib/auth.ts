@@ -10,10 +10,7 @@ export const authOptions = {
   },
   pages: {
     signIn: "/signin",
-    signOut: "/signout",
     error: "/signin",
-    verifyRequest: "/signin",
-    newUser: "/onboarding",
   },
   providers: [
     CredentialsProvider({

@@ -6,12 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
-  // Pour Supabase PostgreSQL, remplacer par:
-  // provider = "postgresql"
-  // url      = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")
 }
 
 // NextAuth.js required models

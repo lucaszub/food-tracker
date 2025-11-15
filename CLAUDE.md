@@ -42,7 +42,7 @@ L'application dispose désormais d'un **design moderne** inspiré des meilleures
 
 - **Next.js API Routes** pour les endpoints
 - **Anthropic Claude API** pour l'analyse d'images (claude-3-5-sonnet ou claude-3-opus)
-- **Base de données**: Supabase PostgreSQL avec Prisma ORM
+- **Base de données**: PostgreSQL (Prisma Postgres ou Neon) avec Prisma ORM
 - **Authentification**: NextAuth.js avec Prisma Adapter
 - **Stockage images**: Vercel Blob
 - **Validation**: Zod pour validation côté client et serveur
@@ -463,11 +463,13 @@ enum MealType {
 Avant chaque commit, l'assistant doit :
 
 1. **Tester le code** :
+
    - Vérifier que le code compile sans erreurs
    - Tester l'API ou l'interface manuellement ou avec un script de test
    - S'assurer que les fonctionnalités marchent comme prévu
 
 2. **Attendre la validation utilisateur** :
+
    - **TOUJOURS** demander à l'utilisateur de tester lui-même
    - Attendre confirmation explicite que "ça marche" ou "c'est bon"
    - Ne jamais commit sur une simple supposition que le code fonctionne
@@ -477,6 +479,7 @@ Avant chaque commit, l'assistant doit :
    - Demander confirmation avant d'exécuter `git commit`
 
 **Exemple de workflow correct** :
+
 ```
 Assistant : "✅ Code prêt. Pouvez-vous tester sur http://localhost:3000/analyze ?"
 Utilisateur : "c'est bon ça marche"
@@ -484,6 +487,7 @@ Assistant : "Parfait ! Je vais maintenant commit ces changements. Voici le messa
 ```
 
 **⚠️ INTERDIT** :
+
 - Commit automatique après avoir écrit du code
 - Commit sans avoir testé
 - Commit sans confirmation utilisateur explicite
@@ -532,11 +536,13 @@ npx tsc --noEmit         # Vérifier les types TypeScript
 ### Notes importantes sur les commandes
 
 **Prisma Studio:**
+
 - Le script `npm run studio` utilise `dotenv-cli` pour charger automatiquement les variables d'environnement
 - Prisma CLI ne charge pas le `.env` par défaut, d'où l'utilisation de `dotenv-cli`
 - Alternative manuelle: `DATABASE_URL="file:./dev.db" npx prisma studio`
 
 **Build:**
+
 - Utiliser `npx next build` (sans `--turbopack`) car turbopack a un bug avec les build manifests
 - Le build avec turbopack via `npm run build` peut échouer aléatoirement
 
@@ -567,103 +573,33 @@ npx tsc --noEmit         # Vérifier les types TypeScript
 - **Coûts API**: Claude Vision coûte ~$3 par 1000 images (Sonnet 3.5). Prévoir un système de quotas si nécessaire
 - **Accessibilité**: S'assurer que tous les composants sont accessibles (ARIA labels, keyboard navigation)
 
-## Configuration Supabase + Prisma
+## Configuration Base de Données Cloud
 
-### Étape 1: Créer un projet Supabase
+📘 **Voir [PRISMA_CLOUD_SETUP.md](./PRISMA_CLOUD_SETUP.md) pour le guide complet de setup.**
 
-1. **Créer un compte sur Supabase**:
-
-   - Aller sur [https://supabase.com](https://supabase.com)
-   - Créer un compte gratuit ou se connecter
-
-2. **Créer un nouveau projet**:
-
-   - Cliquer sur "New Project"
-   - Nom du projet: `food-tracker` (ou au choix)
-   - Database Password: **Choisir un mot de passe fort et le sauvegarder**
-   - Région: Choisir la plus proche (ex: Europe West pour l'Europe)
-   - Cliquer sur "Create new project"
-   - ⏱️ Attendre ~2 minutes que le projet soit provisionné
-
-3. **Récupérer les credentials**:
-   - Dans le dashboard, aller dans **Settings** → **Database**
-   - Copier la **Connection String** (sous "Connection string")
-   - Format: `postgresql://postgres.[ref]:[YOUR-PASSWORD]@aws-0-eu-central-1.pooler.supabase.com:5432/postgres`
-
-### Étape 2: Configurer les variables d'environnement
-
-1. **Copier le fichier .env.example**:
+### Quick Start avec Prisma Postgres
 
 ```bash
-cp .env.example .env
-```
+# 1. Créer compte sur https://console.prisma.io/
+# 2. Créer database "food-tracker-db"
+# 3. Copier la connection string
 
-2. **Remplir le fichier .env**:
+# 4. Configurer .env
+DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=eyJ..."
 
-```env
-# Remplacer [YOUR-PASSWORD] par votre mot de passe Supabase
-# Remplacer [YOUR-PROJECT-REF] par votre ref (ex: abcdefghijklmnop)
-
-# Connection poolée (pour Prisma avec connexions multiples)
-DATABASE_URL="postgresql://postgres.[ref]:[YOUR-PASSWORD]@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?pgbouncer=true&connection_limit=1"
-
-# Connection directe (pour migrations Prisma)
-DIRECT_URL="postgresql://postgres.[ref]:[YOUR-PASSWORD]@aws-0-eu-central-1.pooler.supabase.com:6543/postgres"
-
-# NextAuth
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="générer-avec: openssl rand -base64 32"
-
-# Supabase Keys (optionnel pour client direct)
-NEXT_PUBLIC_SUPABASE_URL="https://[YOUR-PROJECT-REF].supabase.co"
-NEXT_PUBLIC_SUPABASE_ANON_KEY="votre-anon-key"
-```
-
-3. **Générer le secret NextAuth**:
-
-```bash
-openssl rand -base64 32
-```
-
-### Étape 3: Appliquer le schéma Prisma à Supabase
-
-1. **Générer le client Prisma**:
-
-```bash
+# 5. Appliquer le schéma
 npx prisma generate
-```
+npx prisma db push
 
-2. **Créer les migrations**:
-
-```bash
-npx prisma migrate dev --name init
-```
-
-3. **Vérifier dans Supabase**:
-   - Aller dans **Table Editor** dans le dashboard Supabase
-   - Vous devriez voir toutes les tables: User, Account, Session, Meal, FoodItem, etc.
-
-### Étape 4: Explorer la base de données (optionnel)
-
-**Prisma Studio** (interface graphique locale):
-
-```bash
+# 6. Vérifier
 npx prisma studio
 ```
-
-Ouvre http://localhost:5555 avec une interface pour voir/éditer les données
-
-**Supabase Table Editor**:
-
-- Dans le dashboard Supabase → **Table Editor**
-- Interface web pour gérer les données directement
 
 ### Architecture Base de Données
 
 Le schéma Prisma complet est dans `prisma/schema.prisma`:
 
 **Tables principales**:
-
 - `User`: Profil utilisateur + métriques calculées + onboarding status
 - `Account`, `Session`, `VerificationToken`: Gérées par NextAuth.js
 - `Meal`: Repas analysés avec nutrition totale
@@ -672,7 +608,6 @@ Le schéma Prisma complet est dans `prisma/schema.prisma`:
 - `WeightHistory`: Suivi du poids dans le temps
 
 **Enums**:
-
 - `Sex`: MALE, FEMALE, OTHER
 - `ActivityLevel`: SEDENTARY, LIGHT, MODERATE, ACTIVE, VERY_ACTIVE
 - `Goal`: LOSE_WEIGHT, MAINTAIN, GAIN_MUSCLE
@@ -703,9 +638,7 @@ npx prisma format
 npx prisma validate
 ```
 
-### Connexion à Supabase depuis le code
-
-**Prisma Client** (recommandé pour l'app):
+### Connexion depuis le code
 
 ```typescript
 // lib/prisma.ts
@@ -720,43 +653,13 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient();
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 ```
 
-**Supabase Client** (optionnel, pour features Supabase spécifiques):
-
-```typescript
-// lib/supabase.ts
-import { createClient } from "@supabase/supabase-js";
-
-export const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-```
-
-### Troubleshooting
-
-**Erreur "Can't reach database server"**:
-
-- Vérifier que le mot de passe dans DATABASE_URL est correct
-- Vérifier que le projet Supabase est bien démarré (dashboard)
-- Vérifier la connexion internet
-
-**Erreur lors des migrations**:
-
-- Utiliser `DIRECT_URL` pour les migrations (pas la connexion poolée)
-- Vérifier que la base est accessible
-
-**Prisma Client non généré**:
-
-```bash
-npx prisma generate
-```
-
 ## Ressources et documentation
 
 - [Next.js 15 Docs](https://nextjs.org/docs)
 - [Anthropic Claude API](https://docs.anthropic.com/en/api/getting-started)
 - [Prisma Docs](https://www.prisma.io/docs)
-- [Supabase Docs](https://supabase.com/docs)
+- [Prisma Data Platform](https://console.prisma.io/)
+- [Neon Database](https://neon.tech/docs)
 - [NextAuth.js Docs](https://next-auth.js.org/getting-started/introduction)
 - [shadcn/ui](https://ui.shadcn.com)
 - [React Hook Form](https://react-hook-form.com/)
