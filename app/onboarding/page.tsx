@@ -86,7 +86,7 @@ export default function OnboardingPage() {
       goal = "GAIN_MUSCLE"
     }
     step3Form.setValue("goal", goal)
-  }, [])
+  }, [step3Form])
 
   // Step 4 form
   const step4Form = useForm({
@@ -97,6 +97,16 @@ export default function OnboardingPage() {
       dietType: "",
     },
   })
+
+  // Protection: Rediriger si pas de session (APRÈS tous les hooks)
+  if (!session) {
+    router.push("/signin")
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    )
+  }
 
   const handleStep1Next = step1Form.handleSubmit((data) => {
     setFormData((prev) => ({ ...prev, ...data }))
